@@ -8,19 +8,20 @@ const Todo = () => {
   const [updateUI,setUpdateUI]=useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentTodo, setCurrentTodo] = useState({ id: '', toDo: '' });
+
   useEffect(() => {
     fetchTodos();
   }, [updateUI]);
   const fetchTodos = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/get');
+      const response = await axios.get('https://todo-backend-vt7b.onrender.com/api/get',);
       setTodoList(response.data);
     } catch (error) {
       console.error('Error fetching todos:', error);
     }
   };
   const handleAdd =() => {
-   axios.post('http://localhost:3001/api/create',{toDo:input})
+   axios.post('https://todo-backend-vt7b.onrender.com/api/create',{toDo:input})
    .then(response=>{
     console.log(response.data)
     setUpdateUI((prevState)=>!prevState)
@@ -36,7 +37,7 @@ const Todo = () => {
   };
   const handleUpdate = async () => {
     try {
-      await axios.put(`http://localhost:3001/api/update/${currentTodo.id}`, { toDo: currentTodo.toDo });
+      await axios.put(`https://todo-backend-vt7b.onrender.com/api/update/${currentTodo.id}`, { toDo: currentTodo.toDo });
       setUpdateUI(prevState => !prevState);
       setIsModalOpen(false);
     } catch (error) {
@@ -46,7 +47,7 @@ const Todo = () => {
   const handleDelete = async (id) => {
     console.log('Deleting todo with id:', id); 
     try {
-      await axios.delete(`http://localhost:3001/api/delete/${id}`);
+      await axios.delete(`https://todo-backend-vt7b.onrender.com/api/delete/${id}`);
       setTodoList(prevList => prevList.filter(todoItem => todoItem.id !== id));
       setUpdateUI((prevState)=>!prevState)//for reloading
     } catch (error) {

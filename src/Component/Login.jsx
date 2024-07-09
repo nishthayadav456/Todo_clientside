@@ -15,7 +15,7 @@ function handleChange(e){
 async function handleSubmit(e){
   e.preventDefault()
   try {
-    const response = await axios.post('http://localhost:3001/api/login', data, {
+    const response = await axios.post('https://todo-backend-vt7b.onrender.com/api/login', data, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -30,7 +30,7 @@ async function handleSubmit(e){
   }
   catch(err){
     console.log(err)  
-    alert(err.response?.data?.message || "An error occurred during login.");    
+    alert(err.message || "Something went wrong.",);    
     }
     }
   
@@ -49,6 +49,7 @@ async function handleSubmit(e){
       </div>
       <div class="flex items-center justify-center ">
         <div>
+          
         <button type="submit" class="bg-purple-500 text-white font-bold py-2 px-4 rounded" style={{width:"20rem"}}>
           LogIn
         </button>

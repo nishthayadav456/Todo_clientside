@@ -16,7 +16,7 @@ setData({...data,[e.target.id]:e.target.value})
   async function handleSubmit(e){
 e.preventDefault()
 try {
-  const response = await axios.post('http://localhost:3001/api/signup', data, {
+  const response = await axios.post('https://todo-backend-vt7b.onrender.com/api/signup', data, {
     headers: {
       'Content-Type': 'application/json'
     },
@@ -31,7 +31,7 @@ try {
 }
 catch(err){
   console.log(err)  
-  alert(err.response?.data?.message || "An error occurred during signup.");    
+  alert(err.message || "Something went wrong.",);    
   }
   }
   return (
