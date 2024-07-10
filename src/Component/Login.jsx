@@ -2,18 +2,39 @@
 import { NavLink,useNavigate  } from 'react-router-dom'
 import React, { useState } from 'react'
 import axios from 'axios'
+import Joi from 'joi-browser';
 const Login = () => {
   const navigate = useNavigate();
   const [data,setData]=useState({
     email:"",
     password:""
   })
- 
+  const [errors, setErrors] = useState({});
+
+  const schema = {
+    email: Joi.string().email().required().label("Email"),
+    password: Joi.string().min(6).max(30).required().label("Password")
+  };
+
+  const validate = () => {
+    const { error } = Joi.validate(data, schema, { abortEarly: false });
+    if (!error) return null;
+
+    const errors = {};
+    for (let item of error.details)
+      errors[item.path[0]] = item.message;
+    return errors;
+  };
+
 function handleChange(e){
   setData({...data,[e.target.id]:e.target.value})
 }
 async function handleSubmit(e){
   e.preventDefault()
+  const errors = validate();
+  setErrors(errors || {});
+  if (errors) return;
+
   try {
     const response = await axios.post('https://todo-backend-vt7b.onrender.com/api/login', data, {
       headers: {
@@ -42,10 +63,12 @@ async function handleSubmit(e){
       <div class="mb-4">
         <label for="email" class=" text-gray-700 text-sm font-bold mb-2">Email:</label>
         <input type="email" id="email" class=" border rounded w-full py-2 px-3 text-gray-700" placeholder="Enter your email" onChange={handleChange} value={data.email}/>
+        {errors.email && <div className="text-red-500 text-sm">{errors.email}</div>}
       </div>
       <div class="mb-6">
         <label for="password" class=" text-gray-700 text-sm font-bold mb-2">Password:</label>
         <input type="password" id="password" class="border rounded w-full py-2 px-3 text-gray-700 mb-3" placeholder="Enter your password" onChange={handleChange} value={data.password}/>
+        {errors.password && <div className="text-red-500 text-sm">{errors.password}</div>}
       </div>
       <div class="flex items-center justify-center ">
         <div>
