@@ -12,7 +12,7 @@ const Signup = () => {
     password:""
   })
   const [errors, setErrors] = useState({});
-
+  const [loading, setLoading] = useState(false);
   const schema = {
     username: Joi.string().min(4).max(30).required().label("Username"),
     email: Joi.string().email().required().label("Email"),
@@ -37,6 +37,7 @@ e.preventDefault()
 const errors = validate();
 setErrors(errors || {});
 if (errors) return;
+setLoading(true);
 try {
   const response = await axios.post('https://todo-backend-vt7b.onrender.com/api/signup', data, {
     headers: {
@@ -48,7 +49,7 @@ try {
   alert(response.data.message);
   localStorage.setItem('token', response.data.token);
   localStorage.setItem('token',response.data.username)
-  setIsLoggedIn(true);
+   setIsLoggedIn(true);
   setTimeout(() => {
     navigate("/login");
   }, 2000);
@@ -56,6 +57,9 @@ try {
 catch(err){
   console.log(err)  
   alert(err.message || "Something went wrong.",);    
+  }
+  finally {
+    setLoading(false);
   }
   }
   return (
@@ -80,9 +84,9 @@ catch(err){
       </div>
       <div class="flex items-center justify-between">
         <div>
-        <button type="submit" class="bg-purple-500 text-white font-bold py-2 px-4 rounded" style={{width:"20rem"}}>
-          Sign In
-        </button>
+        <button type="submit" className="bg-purple-500 text-white font-bold py-2 px-4 rounded" style={{ width: "20rem" }} disabled={loading}>
+                {loading ? 'Signing in...' : 'Sign In'}
+              </button>
         <p>Already have an account</p>
        <NavLink to='/login'>
         <button type="submit" class="bg-purple-500 text-white font-bold py-2 px-4 rounded mt-4" style={{width:"20rem"}}>
