@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
+import { useAuth } from './AuthContext';
+import { useNavigate } from 'react-router-dom';
 const Todo = () => {
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
   const [todoList, setTodoList] = useState([]);
   const [input, setInput] = useState('');
   const [updateUI,setUpdateUI]=useState(false)
@@ -10,8 +14,12 @@ const Todo = () => {
   const [currentTodo, setCurrentTodo] = useState({ id: '', toDo: '' });
 
   useEffect(() => {
-    fetchTodos();
-  }, [updateUI]);
+    if (!isLoggedIn) {
+      navigate('/login');
+    } else {
+      fetchTodos();
+    }
+  }, [updateUI, isLoggedIn, navigate]);
   const fetchTodos = async () => {
     try {
       const response = await axios.get('https://todo-backend-vt7b.onrender.com/api/get',);

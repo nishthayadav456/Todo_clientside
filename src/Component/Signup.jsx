@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import { NavLink,useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Joi from 'joi-browser';
-
+import { useAuth } from './AuthContext';
 const Signup = () => {
   const navigate = useNavigate();
+  const { setIsLoggedIn } = useAuth();
   const [data,setData]=useState({
     username:"",
     email:"",
@@ -43,9 +44,11 @@ try {
     },
     
   });
+  console.log(response)
   alert(response.data.message);
   localStorage.setItem('token', response.data.token);
   localStorage.setItem('token',response.data.username)
+  setIsLoggedIn(true);
   setTimeout(() => {
     navigate("/login");
   }, 2000);

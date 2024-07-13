@@ -3,8 +3,10 @@ import { NavLink,useNavigate  } from 'react-router-dom'
 import React, { useState } from 'react'
 import axios from 'axios'
 import Joi from 'joi-browser';
+import { useAuth } from './AuthContext';
 const Login = () => {
   const navigate = useNavigate();
+  const { setIsLoggedIn } = useAuth();
   const [data,setData]=useState({
     email:"",
     password:""
@@ -42,9 +44,10 @@ async function handleSubmit(e){
       },
      
     });
+    console.log(response)
     alert(response.data.message);
     localStorage.setItem('token', response.data.token);
-
+    setIsLoggedIn(true);
     setTimeout(() => {
       navigate("/");
     }, 2000);
